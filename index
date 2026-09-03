@@ -2,568 +2,413 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>THE PRICE OF LIGHT // A Pacific Climate Story</title>
+<title>PROJECT 0.18</title>
 <style>
-
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Trebuchet MS','Calibri',sans-serif; }
-
-:root{
-  --ink:#191919;
-  --paper:#EFEBE0;
-  --panel:#FAF7EF;
-  --amber:#D68A1E;
-  --amberDeep:#A5620A;
-  --teal:#1B6B73;
-  --tealDeep:#0F484E;
-  --red:#B23A2E;
-  --grey:#6B665C;
-}
-
-html, body{ background:var(--paper); color:var(--ink); scroll-behavior:smooth; }
-
-body{
-  background-image:
-    linear-gradient(var(--paper) 23px, rgba(25,25,25,0.035) 24px),
-    linear-gradient(90deg, var(--paper) 23px, rgba(25,25,25,0.035) 24px);
-  background-size:24px 24px;
-}
-
-#progress{ position:fixed; top:0; left:0; height:4px; width:0%; background:var(--amber); z-index:200; border-bottom:2px solid var(--ink); }
-
-.wrap{ max-width:1400px; margin:0 auto; padding:0 18px; }
-
-/* ============ HERO ============ */
-.hero{
-  min-height:100vh;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  text-align:center; padding:60px 24px; position:relative;
-}
-.eyebrow{
-  display:inline-block; background:var(--amber); color:var(--ink);
-  font-weight:700; font-size:0.78em; letter-spacing:3px; padding:5px 12px; margin-bottom:20px;
-}
-.hero h1{
-  font-size:clamp(42px,7vw,86px); letter-spacing:1px; line-height:1.02; color:var(--ink);
-  max-width:16ch;
-  opacity:0; transform:translateY(20px); animation:rise .8s ease forwards .1s;
-}
-.hero h1 span{ color:var(--amberDeep); }
-.hero p{
-  margin-top:20px; font-size:19px; color:var(--grey); max-width:560px; line-height:1.6;
-  opacity:0; transform:translateY(20px); animation:rise .8s ease forwards .35s;
-}
-.scroll-hint{
-  margin-top:56px; font-size:12px; letter-spacing:2px; color:var(--grey); font-weight:700;
-  opacity:0; animation:rise .8s ease forwards .6s;
-}
-.scroll-hint::after{
-  content:""; display:block; width:2px; height:38px; margin:10px auto 0; background:var(--ink);
-  animation:drop 1.8s ease-in-out infinite;
-}
-@keyframes rise{ to{ opacity:1; transform:translateY(0); } }
-@keyframes drop{
-  0%{ transform:scaleY(0); transform-origin:top; }
-  50%{ transform:scaleY(1); transform-origin:top; }
-  50.01%{ transform-origin:bottom; }
-  100%{ transform:scaleY(0); transform-origin:bottom; }
-}
-
-/* ============ CHAPTER LABEL ============ */
-.chapter{ max-width:680px; margin:0 auto; padding:110px 24px 24px; text-align:center; }
-.chapter .tag{
-  display:inline-block; background:var(--ink); color:var(--amber);
-  font-size:12px; letter-spacing:2px; font-weight:700; padding:5px 12px; text-transform:uppercase;
-}
-.chapter h2{ font-size:clamp(28px,4vw,42px); margin:16px 0; line-height:1.15; }
-.chapter p{ font-size:17px; color:var(--grey); line-height:1.65; }
-
-/* ============ VERTICAL STICKY STORY ============ */
-.story{ position:relative; }
-.sticky{
-  position:sticky; top:0; height:100vh;
-  display:flex; align-items:center; justify-content:space-around;
-  overflow:hidden; gap:30px; padding:0 24px;
-}
-
-.panel{
-  background:var(--panel); border:3px solid var(--ink);
-  box-shadow:8px 8px 0 rgba(25,25,25,0.85);
-  padding:20px 22px 14px;
-}
-.panel.chartPanel{ width:50%; max-width:600px; }
-.panel .frame-label{
-  display:flex; justify-content:space-between; font-size:11px; font-weight:700;
-  letter-spacing:0.5px; text-transform:uppercase; color:var(--grey); margin-bottom:10px;
-  border-bottom:2px solid var(--ink); padding-bottom:8px;
-}
-svg{ width:100%; height:auto; display:block; overflow:visible; }
-
-.graph-line{ fill:none; stroke-width:4; stroke-linecap:round; stroke-linejoin:round; transition:stroke-dashoffset .15s linear; }
-.axis-line{ stroke:var(--ink); stroke-width:1.5; }
-.gridline{ stroke:rgba(25,25,25,0.1); stroke-dasharray:2 4; }
-.axis-text{ font-size:10px; fill:var(--grey); font-weight:700; }
-
-.marker{ opacity:0; transition:opacity .35s ease; }
-.marker.show{ opacity:1; }
-.marker-dot{ r:5; stroke:var(--panel); stroke-width:2; }
-.marker-val{ font-size:12px; font-weight:700; text-anchor:middle; }
-
-.bar{ transition:y .5s ease, height .5s ease; }
-.bar-label{ font-size:11px; fill:var(--ink); text-anchor:middle; font-weight:700; }
-.bar-value{ font-size:11.5px; fill:var(--ink); font-weight:700; text-anchor:middle; opacity:0; transition:opacity .35s ease; }
-.bar-value.show{ opacity:1; }
-
-/* text steps */
-.text-area{ width:38%; max-width:420px; min-height:300px; position:relative; }
-.step{
-  position:absolute; top:0; left:0; right:0; opacity:0; transform:translateY(32px);
-  transition:opacity .5s ease, transform .5s ease;
-}
-.step.active{ opacity:1; transform:translateY(0); }
-.step .tag{
-  display:inline-block; background:var(--amber); color:var(--ink); font-size:12px; font-weight:700;
-  letter-spacing:1px; padding:3px 9px; text-transform:uppercase;
-}
-.step h3{ font-size:34px; margin:12px 0 12px; line-height:1.1; }
-.step p{ font-size:16.5px; line-height:1.65; color:var(--ink); margin:0; }
-.step .stat{ font-size:24px; font-weight:700; color:var(--red); margin-top:12px; }
-.step .stat span{ font-size:12.5px; color:var(--grey); font-weight:normal; margin-left:6px; }
-
-.progress-rail{ position:absolute; left:10px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:8px; }
-.progress-rail .dot{ width:8px; height:8px; background:var(--panel); border:2px solid var(--ink); transition:background .3s; }
-.progress-rail .dot.active{ background:var(--amber); }
-
-@media (max-width:900px){
-  .sticky{ flex-direction:column; justify-content:center; padding-top:60px; }
-  .panel.chartPanel, .text-area{ width:92%; max-width:480px; }
-  .text-area{ min-height:220px; }
-  .progress-rail{ display:none; }
-}
-
-/* ============ HORIZONTAL SCROLL CHAPTER ============ */
-.hscroll-outer{ position:relative; height:340vh; }
-.hscroll-sticky{
-  position:sticky; top:0; height:100vh; overflow:hidden;
-  display:flex; flex-direction:column; justify-content:center;
-}
-.hscroll-track{
-  display:flex; gap:26px; padding:0 6vw; will-change:transform;
-}
-.hcard{
-  flex:0 0 auto; width:min(78vw,420px);
-  background:var(--panel); border:3px solid var(--ink);
-  box-shadow:8px 8px 0 rgba(25,25,25,0.85);
-  padding:26px 24px;
-}
-.hcard .tag{
-  display:inline-block; background:var(--ink); color:var(--amber); font-size:11px; font-weight:700;
-  letter-spacing:1.5px; padding:4px 10px; text-transform:uppercase; margin-bottom:14px;
-}
-.hcard h3{ font-size:26px; margin-bottom:10px; }
-.hcard .figure{ font-size:40px; font-weight:700; color:var(--tealDeep); margin:8px 0; }
-.hcard .figure span{ font-size:14px; color:var(--grey); font-weight:normal; display:block; margin-top:4px; }
-.hcard p{ font-size:15px; color:var(--ink); line-height:1.6; }
-.hcard.warn .figure{ color:var(--red); }
-.hcard-bar{ height:14px; background:var(--paper); border:2px solid var(--ink); margin:14px 0; position:relative; overflow:hidden; }
-.hcard-bar-fill{ height:100%; background:var(--teal); transition:width 1s ease; }
-.hcard.warn .hcard-bar-fill{ background:var(--red); }
-
-.hscroll-heading{
-  text-align:center; margin-bottom:30px; padding:0 24px;
-}
-.hscroll-heading .tag{
-  display:inline-block; background:var(--ink); color:var(--amber);
-  font-size:12px; letter-spacing:2px; font-weight:700; padding:5px 12px; text-transform:uppercase;
-}
-.hscroll-heading h2{ font-size:clamp(26px,4vw,38px); margin:16px 0 8px; }
-.hscroll-heading p{ font-size:15px; color:var(--grey); max-width:520px; margin:0 auto; }
-
-.hscroll-hint{
-  text-align:center; font-size:11px; letter-spacing:1.5px; color:var(--grey); font-weight:700;
-  margin-top:20px; text-transform:uppercase;
-}
-.hscroll-progress{
-  width:200px; height:4px; background:var(--paper); border:2px solid var(--ink); margin:10px auto 0; overflow:hidden;
-}
-.hscroll-progress-fill{ height:100%; background:var(--amber); width:0%; }
-
-/* ============ ENDING ============ */
-.end{
-  min-height:100vh; display:grid; place-items:center; text-align:center;
-  background:var(--ink); color:var(--paper); padding:110px 24px;
-  border-top:4px solid var(--amberDeep);
-}
-.end .tag{
-  display:inline-block; background:var(--amber); color:var(--ink); font-size:12px; font-weight:700;
-  letter-spacing:2px; padding:5px 12px; text-transform:uppercase; margin-bottom:20px;
-}
-.end h2{ font-size:clamp(32px,5vw,54px); margin:0 0 16px; max-width:18ch; margin-left:auto; margin-right:auto; }
-.end p{ font-size:18px; color:#CFC9B8; max-width:560px; margin:0 auto; line-height:1.65; }
-.end .stats{ display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:60px; }
-.end .stat-box{
-  border:2px solid var(--amber); padding:16px 20px; text-align:left; min-width:170px;
-}
-.end .stat-box .n{ font-size:32px; font-weight:700; color:var(--amber); display:block; }
-.end .stat-box .l{ font-size:12px; letter-spacing:0.5px; color:#CFC9B8; text-transform:uppercase; margin-top:6px; max-width:16ch; }
-
-/* ============ CREDITS ============ */
-.credits{ padding:50px 24px 80px; text-align:center; font-size:13px; color:var(--grey); max-width:660px; margin:0 auto; line-height:1.9; }
-.credits a{ color:var(--tealDeep); text-decoration:none; font-weight:700; }
-.credits a:hover{ text-decoration:underline; }
-
-@media (prefers-reduced-motion:reduce){ *{ animation:none !important; transition:none !important; } }
+  @import url('https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:wght@400;700&display=swap');
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:#000; font-family:'Space Mono', monospace; color:#d8d8d0; height:100%; overflow:hidden; }
+  svg.dither-defs { position:absolute; width:0; height:0; }
+  #stage { width:100vw; height:100vh; position:relative; display:flex; align-items:center; justify-content:center; background:#000; }
+  #frame { width:780px; max-width:97vw; aspect-ratio:4/3; background:#050505; border:3px solid #3a3a34; box-shadow:0 0 0 6px #111, inset 0 0 40px rgba(0,0,0,0.9); position:relative; overflow:hidden; filter:grayscale(1); }
+  #frame::after { content:""; position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 1px, rgba(0,0,0,0.2) 2px, rgba(0,0,0,0.2) 3px); mix-blend-mode:multiply; z-index:50; }
+  #frame::before { content:""; position:absolute; inset:0; pointer-events:none; box-shadow:inset 0 0 100px 22px rgba(0,0,0,0.9); z-index:51; }
+  .screen { position:absolute; inset:0; display:none; flex-direction:column; }
+  .screen.active { display:flex; }
+  #boot { background:#030503; color:#d8ead8; font-family:'VT323', monospace; padding:26px 28px; font-size:19px; line-height:1.5; justify-content:flex-start; filter:contrast(1.25); }
+  #bootLines { white-space:pre-wrap; flex:1; }
+  #startBtn { display:none; margin-top:16px; align-self:flex-start; background:transparent; border:2px solid #d8ead8; color:#d8ead8; font-family:'VT323', monospace; font-size:21px; letter-spacing:3px; padding:7px 20px; cursor:pointer; }
+  #startBtn:hover { background:#d8ead8; color:#050805; }
+  #vn { background:#0c0c0c; }
+  #topBar { height:26px; display:flex; align-items:center; justify-content:space-between; padding:0 10px; background:#050505; border-bottom:1px solid #2a2a2a; font-family:'VT323', monospace; font-size:14px; color:#888; letter-spacing:1px; z-index:60; position:relative; }
+  #topBar .chapter { color:#eee; }
+  #notebookBtn { background:transparent; border:1px solid #555; color:#ccc; font-family:'VT323', monospace; font-size:14px; padding:1px 8px; cursor:pointer; letter-spacing:1px; }
+  #notebookBtn:hover { border-color:#eee; color:#fff; }
+  #portraitWrap { position:relative; flex:1; display:flex; align-items:flex-end; justify-content:center; overflow:hidden; background:#0a0a0a; }
+  .portrait { position:absolute; bottom:0; height:100%; width:auto; max-width:62%; object-fit:cover; object-position:top; filter:url(#ditherFilter) grayscale(1) contrast(1.6) brightness(0.95); opacity:0; transition:opacity 0.3s ease; }
+  .portrait.left { left:-4%; }
+  .portrait.right { right:-4%; transform:scaleX(-1); }
+  .portrait.show { opacity:1; }
+  #dataCard { display:none; position:absolute; top:6%; left:7%; right:7%; background:#050505; border:1px solid #cfcfcf; padding:12px 14px; z-index:40; font-family:'VT323', monospace; font-size:16px; color:#eee; box-shadow:0 0 24px rgba(0,0,0,0.85); }
+  #dataCard.show { display:block; }
+  #dataCard .title { letter-spacing:2px; border-bottom:1px solid #444; padding-bottom:4px; margin-bottom:6px; }
+  #dataCard .row { display:flex; justify-content:space-between; font-size:13px; color:#d8d8d0; margin:2px 0; font-family:'Space Mono', monospace; }
+  #clickCatcher { position:absolute; inset:0; z-index:10; cursor:pointer; }
+  #textbox { height:42%; border-top:3px solid #3a3a34; background:#080808; padding:10px 16px 12px; display:flex; flex-direction:column; position:relative; }
+  #speaker { font-family:'VT323', monospace; font-size:19px; color:#eee; letter-spacing:2px; text-decoration:underline; text-decoration-color:#444; margin-bottom:5px; min-height:21px; }
+  #dialogueText { flex:1; font-size:13px; line-height:1.55; color:#cfcfc6; overflow-y:auto; padding-right:4px; }
+  #dialogueText::-webkit-scrollbar { width:5px; }
+  #dialogueText::-webkit-scrollbar-thumb { background:#333; }
+  #advanceHint { font-size:11px; color:#555; text-align:right; margin-top:4px; letter-spacing:1px; }
+  #choices { display:none; flex-direction:column; gap:5px; margin-top:6px; max-height:52%; overflow-y:auto; }
+  #choices.active { display:flex; }
+  .choiceBtn { background:#0f0f0f; border:1px solid #444; color:#d8d8d0; font-family:'Space Mono', monospace; font-size:12px; text-align:left; padding:7px 9px; cursor:pointer; }
+  .choiceBtn::before { content:"\25B8  "; color:#eee; }
+  .choiceBtn:hover { background:#1c1c1c; border-color:#eee; }
+  #notebook { display:none; position:absolute; inset:0; background:rgba(0,0,0,0.94); z-index:80; padding:22px 24px; overflow-y:auto; font-family:'VT323', monospace; }
+  #notebook.show { display:block; }
+  #notebook h2 { font-size:20px; letter-spacing:3px; color:#fff; border-bottom:1px solid #444; padding-bottom:6px; margin:0 0 10px; }
+  #notebook .entry { border:1px solid #333; padding:8px 10px; margin-bottom:8px; }
+  #notebook .entry .t { font-size:15px; color:#eee; letter-spacing:1px; margin-bottom:4px; }
+  #notebook .entry .row { display:flex; justify-content:space-between; font-size:12.5px; color:#bbb; font-family:'Space Mono', monospace; margin:1px 0; }
+  #notebook .empty { color:#666; font-family:'Space Mono', monospace; font-size:12.5px; }
+  #closeNotebook { margin-top:10px; background:transparent; border:1px solid #999; color:#eee; font-family:'VT323', monospace; font-size:15px; padding:5px 14px; cursor:pointer; letter-spacing:1px; }
+  #closeNotebook:hover { background:#fff; color:#000; }
+  #endScreen { background:#030503; color:#eee; font-family:'VT323', monospace; align-items:center; justify-content:flex-start; text-align:left; padding:22px 26px; overflow-y:auto; }
+  #endScreen h1 { font-size:24px; letter-spacing:3px; margin:6px 0 4px; text-align:center; }
+  #endScreen h3 { font-size:15px; letter-spacing:2px; color:#cfcfc6; margin:14px 0 4px; border-bottom:1px solid #333; padding-bottom:3px; }
+  #endScreen p { font-size:13.5px; color:#cfcfc6; line-height:1.55; font-family:'Space Mono', monospace; margin:4px 0; }
+  #endScreen ol { font-size:13.5px; color:#cfcfc6; line-height:1.6; font-family:'Space Mono', monospace; padding-left:18px; margin:4px 0; }
+  #endScreen li { margin-bottom:8px; }
+  #endScreen li b { color:#fff; }
+  #restartBtn { display:block; margin:18px auto 4px; background:transparent; border:2px solid #eee; color:#eee; font-family:'VT323', monospace; font-size:18px; padding:6px 18px; cursor:pointer; letter-spacing:2px; }
+  #restartBtn:hover { background:#eee; color:#000; }
+  #footerNote { color:#555; font-size:11px; margin-top:14px; text-align:center; font-family:'Space Mono', monospace; letter-spacing:1px; }
 </style>
 </head>
 <body>
 
-<div id="progress"></div>
+<svg class="dither-defs">
+  <filter id="ditherFilter" x="-20%" y="-20%" width="140%" height="140%">
+    <feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0 0 0 1 0" result="gray"/>
+    <feComponentTransfer in="gray" result="contrasted">
+      <feFuncR type="linear" slope="2.1" intercept="-0.45"/>
+      <feFuncG type="linear" slope="2.1" intercept="-0.45"/>
+      <feFuncB type="linear" slope="2.1" intercept="-0.45"/>
+    </feComponentTransfer>
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="noise"/>
+    <feComponentTransfer in="noise" result="threshNoise">
+      <feFuncA type="discrete" tableValues="0 1"/>
+    </feComponentTransfer>
+    <feComposite in="contrasted" in2="threshNoise" operator="arithmetic" k1="0" k2="1" k3="0.55" k4="-0.05" result="dithered"/>
+    <feComponentTransfer in="dithered">
+      <feFuncR type="discrete" tableValues="0.05 0.95"/>
+      <feFuncG type="discrete" tableValues="0.05 0.95"/>
+      <feFuncB type="discrete" tableValues="0.05 0.95"/>
+    </feComponentTransfer>
+  </filter>
+</svg>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="eyebrow">A PACIFIC CLIMATE STORY</div>
-  <h1>The price of <span>light</span></h1>
-  <p>Every switch flipped on in the Pacific comes from somewhere. This is the story of who burns the fuel, who breathes the exhaust, and who pays for the tide it brings.</p>
-  <div class="scroll-hint">SCROLL TO BEGIN</div>
-</section>
+<div id="stage">
+<div id="frame">
 
-<!-- CHAPTER 1: FIJI LINE (vertical sticky) -->
-<div class="chapter">
-  <div class="tag">Chapter One</div>
-  <h2>Fiji's grid, 2000 – 2023</h2>
-  <p>A single diesel generator once kept a coastal village awake after dark. Today the whole grid runs harder to keep up with modern life.</p>
+  <div class="screen active" id="boot">
+    <div id="bootLines"></div>
+    <button id="startBtn" onclick="startGame()">[ START ]</button>
+  </div>
+
+  <div class="screen" id="vn">
+    <div id="topBar">
+      <span class="chapter" id="chapterLabel">CH.0 &mdash; BRIEFING</span>
+      <button id="notebookBtn" onclick="toggleNotebook(true)">CASE LOG <span id="logCount">[0]</span></button>
+    </div>
+    <div id="portraitWrap">
+      <img class="portrait left" id="portraitLeft" src="https://raw.githubusercontent.com/aerablooms/proj18/main/the%20male.jpeg">
+      <img class="portrait right" id="portraitRight" src="https://raw.githubusercontent.com/aerablooms/proj18/main/the%20female.jpeg">
+      <div id="dataCard">
+        <div class="title">// DATASET READOUT</div>
+        <div id="dataCardBody"></div>
+      </div>
+      <div id="clickCatcher" onclick="advance()"></div>
+    </div>
+    <div id="textbox">
+      <div id="speaker">&nbsp;</div>
+      <div id="dialogueText"></div>
+      <div id="advanceHint">&#9662; click to continue</div>
+      <div id="choices"></div>
+    </div>
+    <div id="notebook">
+      <h2>CASE LOG</h2>
+      <div id="notebookBody"></div>
+      <button id="closeNotebook" onclick="toggleNotebook(false)">[ CLOSE ]</button>
+    </div>
+  </div>
+
+  <div class="screen" id="endScreen">
+    <h1>ANALYSIS COMPLETE</h1>
+    <div id="endBody"></div>
+    <button id="restartBtn" onclick="location.reload()">[ REPLAY INVESTIGATION ]</button>
+    <div id="footerNote">PROJECT 0.18 &mdash; A DATA INVESTIGATION GAME</div>
+  </div>
+
 </div>
-
-<section class="story" id="story1" style="height:400vh;">
-  <div class="sticky">
-    <div class="progress-rail" id="rail1"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-    <div class="panel chartPanel">
-      <div class="frame-label"><span>FIJI · ELECTRICITY GENERATED</span><span>GWh</span></div>
-      <svg id="chart1" viewBox="0 0 500 340"></svg>
-    </div>
-    <div class="text-area" id="text1">
-      <div class="step" data-i="0">
-        <div class="tag">2000</div>
-        <h3>673 GWh</h3>
-        <p>Fiji generates about 673 gigawatt-hours a year — enough for radios, a few fridges, and streetlights in town.</p>
-      </div>
-      <div class="step" data-i="1">
-        <div class="tag">2010</div>
-        <h3>958 GWh</h3>
-        <p>Demand climbs nearly 40% in a decade as tourism grows along the Coral Coast and diesel plants run longer hours.</p>
-      </div>
-      <div class="step" data-i="2">
-        <div class="tag">2019</div>
-        <h3>1,228 GWh</h3>
-        <p>Growth keeps outrunning the grid's cleanest options — most new demand is still met by fuel shipped in by sea.</p>
-      </div>
-      <div class="step" data-i="3">
-        <div class="tag">2023</div>
-        <h3>1,285 GWh</h3>
-        <p>Almost double the year-2000 figure — the most linear growth curve of any Pacific economy.</p>
-        <div class="stat">+91% <span>since 2000, R² = 0.94</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CHAPTER 2: HORIZONTAL SCROLL FILMSTRIP -->
-<section class="hscroll-outer" id="hstory">
-  <div class="hscroll-sticky">
-    <div class="hscroll-heading">
-      <div class="tag">Chapter Two</div>
-      <h2>Six economies, one direction</h2>
-      <p>Scroll down to move sideways through the region — from the fastest-growing grid to the only one shrinking.</p>
-    </div>
-    <div class="hscroll-track" id="htrack">
-      <div class="hcard">
-        <div class="tag">New Caledonia</div>
-        <h3>The fastest riser</h3>
-        <div class="figure">+87.4 <span>GWh added every year — the steepest slope in the region</span></div>
-        <div class="hcard-bar"><div class="hcard-bar-fill" style="width:100%; background:var(--amberDeep);"></div></div>
-        <p>Nickel processing pushes this grid up faster than anywhere else in the Pacific — output nearly doubled since 2000.</p>
-      </div>
-      <div class="hcard">
-        <div class="tag">Papua New Guinea</div>
-        <h3>The biggest grid</h3>
-        <div class="figure">2,842 <span>GWh in 2023 — more than every other PICT combined</span></div>
-        <div class="hcard-bar"><div class="hcard-bar-fill" style="width:82%;"></div></div>
-        <p>Mining and gas exports drive huge swings in demand across the country's scattered island grids.</p>
-      </div>
-      <div class="hcard">
-        <div class="tag">Fiji</div>
-        <h3>The steadiest climb</h3>
-        <div class="figure">+22.8 <span>GWh a year, R² = 0.94 — the most predictable trend of any island</span></div>
-        <div class="hcard-bar"><div class="hcard-bar-fill" style="width:65%;"></div></div>
-        <p>Tourism and household demand pull the grid upward in an almost perfectly straight line, year after year.</p>
-      </div>
-      <div class="hcard">
-        <div class="tag">Samoa</div>
-        <h3>Small island, big jump</h3>
-        <div class="figure">+129% <span>growth since 2000, on a much smaller base</span></div>
-        <div class="hcard-bar"><div class="hcard-bar-fill" style="width:55%;"></div></div>
-        <p>A fast-growing tourism economy on Upolu and Savai'i has more than doubled the demand on the grid.</p>
-      </div>
-      <div class="hcard">
-        <div class="tag">Solomon Islands</div>
-        <h3>Growth without reach</h3>
-        <div class="figure">+85% <span>since 2000, even as much of the country waits for a first connection</span></div>
-        <div class="hcard-bar"><div class="hcard-bar-fill" style="width:48%;"></div></div>
-        <p>Honiara's grid nearly doubled, but growth on paper doesn't always mean growth in access.</p>
-      </div>
-      <div class="hcard warn">
-        <div class="tag">Guam — the exception</div>
-        <h3>The only grid shrinking</h3>
-        <div class="figure">−4.6 <span>GWh a year — the sole major producer in decline</span></div>
-        <div class="hcard-bar"><div class="hcard-bar-fill" style="width:30%;"></div></div>
-        <p>While the rest of the region climbs, Guam's output has quietly eased back for two decades.</p>
-      </div>
-    </div>
-    <div class="hscroll-hint">KEEP SCROLLING ↓
-      <div class="hscroll-progress"><div class="hscroll-progress-fill" id="hfill"></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- CHAPTER 3: GHG BAR (vertical sticky) -->
-<div class="chapter">
-  <div class="tag">Chapter Three</div>
-  <h2>Rising demand isn't rising blame</h2>
-  <p>Measured per person, the story flips — the islands burning the most fuel to keep the lights on often contributed least to the warming now reaching their shores.</p>
-</div>
-
-<section class="story" id="story3" style="height:400vh;">
-  <div class="sticky">
-    <div class="progress-rail" id="rail3"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-    <div class="panel chartPanel">
-      <div class="frame-label"><span>GHG EMISSIONS PER PERSON</span><span>tonnes</span></div>
-      <svg id="chart3" viewBox="0 0 500 340"></svg>
-    </div>
-    <div class="text-area" id="text3">
-      <div class="step" data-i="0">
-        <div class="tag">Tuvalu & Kiribati</div>
-        <h3>Under 1 tonne</h3>
-        <p>Tuvalu emits about 0.4 tonnes of greenhouse gas per person a year — among the lowest on Earth. Its highest point is roughly four metres above sea level.</p>
-      </div>
-      <div class="step" data-i="1">
-        <div class="tag">Fiji & Samoa</div>
-        <h3>2 – 3 tonnes</h3>
-        <p>A fraction of the world average, yet these islands face some of the region's most severe cyclones and coastal erosion.</p>
-      </div>
-      <div class="step" data-i="2">
-        <div class="tag">New Caledonia</div>
-        <h3>13.2 tonnes, rising</h3>
-        <p>Nickel processing pushes per-person emissions far above its neighbours — still climbing, +0.14 t every year, the steepest rise of any PICT.</p>
-      </div>
-      <div class="step" data-i="3">
-        <div class="tag">Palau — the outlier</div>
-        <h3>132 tonnes, on average</h3>
-        <p>Real, but misleading alone — much of that fuel is sold to passing ships and aircraft, not burned by residents.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- END -->
-<section class="end">
-  <div>
-    <div class="tag">Closing</div>
-    <h2>The tide doesn't check who caused it</h2>
-    <p>Island nations are modernising fast, mostly on imported fuel, while carrying a share of climate risk far larger than their share of the problem.</p>
-    <div class="stats">
-      <div class="stat-box"><span class="n">+155</span><span class="l">GWh added to the region's grid every year, on average</span></div>
-      <div class="stat-box"><span class="n">0.4t</span><span class="l">Tuvalu's per-person emissions — among the world's lowest</span></div>
-      <div class="stat-box"><span class="n">4m</span><span class="l">Tuvalu's highest elevation above sea level</span></div>
-    </div>
-  </div>
-</section>
-
-<div class="credits">
-  Every chart here is hand-built with inline SVG bound directly to Pacific climate data, animated on scroll with no chart library — kept dependency-free so it renders instantly, everywhere.<br><br>
-  Data: Pacific Community (SPC) Pacific Data Hub, "Climate Change Indicators" data flow (SPC_DF_CLIMATE_CHANGE_1.0) — Power generation (GWh, 2000–2023) and Greenhouse gas emissions per capita (tonnes, 1970–2024). Trend figures from accompanying OLS regression analysis. Palau and New Caledonia figures reflect national reporting methods that can include fuel re-exported for international shipping and aviation.
 </div>
 
 <script>
-const YEARS = [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023];
-const FIJI = [673.4,706.7,767.4,777.9,809.1,841.9,902.7,909.2,914.6,905.0,957.8,931.2,920.7,969.3,995.0,1019.3,1030.5,1112.6,1140.3,1227.8,1141.9,1094.9,1245.6,1284.5];
-
-const GHG = [
-  { name:"Tuvalu", value:0.4 },
-  { name:"Kiribati", value:0.9 },
-  { name:"Fiji", value:3.0 },
-  { name:"Samoa", value:2.4 },
-  { name:"New Caledonia", value:13.2 },
-  { name:"Palau", value:131.9, broken:true }
-];
-
-const NS = "http://www.w3.org/2000/svg";
-function el(tag, attrs){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }
-
-/* ---------- Chart 1: Fiji line ---------- */
-function buildChart1(){
-  const svg = document.getElementById("chart1");
-  const W=500,H=340,padL=46,padR=16,padT=16,padB=30;
-  const xMin=2000,xMax=2023,yMax=1400;
-  const x = yr => padL + (W-padL-padR)*((yr-xMin)/(xMax-xMin));
-  const y = v => H-padB - (H-padB-padT)*(v/yMax);
-
-  svg.appendChild(el("line",{class:"axis-line",x1:padL,y1:H-padB,x2:W-padR,y2:H-padB}));
-  svg.appendChild(el("line",{class:"axis-line",x1:padL,y1:padT,x2:padL,y2:H-padB}));
-  [0,700,1400].forEach(v=>{
-    svg.appendChild(el("line",{class:"gridline",x1:padL,y1:y(v),x2:W-padR,y2:y(v)}));
-    const t=el("text",{class:"axis-text",x:padL-6,y:y(v)+3,"text-anchor":"end"}); t.textContent=v; svg.appendChild(t);
-  });
-  [2000,2010,2019,2023].forEach(yr=>{
-    const t=el("text",{class:"axis-text",x:x(yr),y:H-padB+16,"text-anchor":"middle"}); t.textContent=yr; svg.appendChild(t);
-  });
-
-  const pts = FIJI.map((v,i)=>`${x(YEARS[i]).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
-  const path = el("polyline",{class:"graph-line",points:pts,stroke:"#A5620A"});
-  svg.appendChild(path);
-
-  const markYears=[2000,2010,2019,2023];
-  const markers = markYears.map((yr,k)=>{
-    const idx = YEARS.indexOf(yr);
-    const dot = el("circle",{class:"marker marker-dot",id:"m1-"+k,cx:x(yr),cy:y(FIJI[idx]),fill:"#191919"});
-    const val = el("text",{class:"marker marker-val",id:"mv1-"+k,x:x(yr),y:y(FIJI[idx])-14,fill:"#191919"});
-    val.textContent = FIJI[idx].toFixed(0);
-    svg.appendChild(dot); svg.appendChild(val);
-    return {dot,val};
-  });
-
-  return {path,markers};
+/* ================= BOOT ================= */
+const bootLinesEl = document.getElementById('bootLines');
+function typeBootLine(text, cb, speed=16){
+  let i = 0;
+  const span = document.createElement('div');
+  bootLinesEl.appendChild(span);
+  const t = setInterval(()=>{
+    span.textContent = text.slice(0,i+1);
+    i++;
+    if(i>=text.length){ clearInterval(t); cb && cb(); }
+  }, speed);
 }
-function updateChart1(state,progress,stepIndex){
-  const len=1600;
-  state.path.setAttribute("stroke-dasharray",len);
-  state.path.setAttribute("stroke-dashoffset",len*(1-progress));
-  state.markers.forEach((m,k)=>{
-    const show = k<=stepIndex;
-    m.dot.classList.toggle("show",show);
-    m.val.classList.toggle("show",show);
+function runBoot(){
+  typeBootLine("PACIFIC ENERGY MONITOR", ()=>{
+    typeBootLine("", ()=>{
+      typeBootLine("Loading regional datasets 2013-2023...", ()=>{ setTimeout(loadBar, 250); });
+    });
   });
 }
-
-/* ---------- Chart 3: GHG bars ---------- */
-function buildChart3(){
-  const svg = document.getElementById("chart3");
-  const W=500,H=340,padL=20,padR=20,padT=30,padB=46;
-  const cap=20;
-  const n=GHG.length, gap=14;
-  const barW=(W-padL-padR-gap*(n-1))/n;
-  const chartBottom=H-padB, chartTop=padT;
-  const scaleH = v => (Math.min(v,cap)/cap)*(chartBottom-chartTop);
-
-  svg.appendChild(el("line",{class:"axis-line",x1:padL,y1:chartBottom,x2:W-padR,y2:chartBottom}));
-
-  const bars = GHG.map((d,i)=>{
-    const bx = padL + i*(barW+gap);
-    const h = scaleH(d.value);
-    const yTop = chartBottom - h;
-    const color = d.broken ? "#B23A2E" : (d.value>8 ? "#D68A1E" : "#1B6B73");
-
-    const rect = el("rect",{class:"bar",id:"bar3-"+i,x:bx.toFixed(1),y:chartBottom,width:barW.toFixed(1),height:0,fill:color,stroke:"#191919","stroke-width":2});
-    svg.appendChild(rect);
-
-    if(d.broken){
-      const pts = `${bx},${yTop} ${bx+barW*0.2},${yTop-8} ${bx+barW*0.4},${yTop+4} ${bx+barW*0.6},${yTop-10} ${bx+barW*0.8},${yTop+3} ${bx+barW},${yTop-6}`;
-      svg.appendChild(el("polyline",{points:pts,fill:"none",stroke:"#191919","stroke-width":2}));
+function loadBar(){
+  const barDiv = document.createElement('div');
+  bootLinesEl.appendChild(barDiv);
+  let n = 0; const total = 24;
+  const t = setInterval(()=>{
+    n++;
+    barDiv.textContent = "\u2588".repeat(n) + " " + Math.min(100, Math.round(n/total*100)) + "%";
+    if(n>=total){
+      clearInterval(t);
+      setTimeout(()=>{
+        const g = document.createElement('div');
+        g.textContent = "\nACCESS GRANTED";
+        g.style.marginTop = "8px";
+        bootLinesEl.appendChild(g);
+        setTimeout(()=>{
+          const msg = document.createElement('div');
+          msg.style.marginTop = "14px";
+          msg.style.color = "#dcefdc";
+          msg.textContent = "An encrypted channel opens.\n\nSUPERVISOR: Morning. We've flagged something odd\nin the regional energy figures. Electricity\ngeneration keeps climbing across the islands, but\nthe emissions numbers aren't moving the way they\nshould.\n\nSUPERVISOR: I need someone to actually read the\ndata before we write the headline. That's you.\nCase file PROJECT 0.18 is open.";
+          bootLinesEl.appendChild(msg);
+          document.getElementById('startBtn').style.display = 'inline-block';
+        }, 450);
+      }, 350);
     }
-
-    const val = el("text",{class:"bar-value",id:"bv3-"+i,x:bx+barW/2,y:yTop-10});
-    val.textContent = (d.broken?"~"+d.value.toFixed(0):d.value)+"t";
-    svg.appendChild(val);
-
-    const lbl = el("text",{class:"bar-label",x:bx+barW/2,y:chartBottom+18});
-    lbl.textContent = d.name;
-    svg.appendChild(lbl);
-
-    return {rect,val,yTop,h};
-  });
-
-  return {bars,chartBottom};
+  }, 50);
 }
-function updateChart3(state,stepIndex){
-  const reveal = [2,4,5,6][stepIndex]||6;
-  state.bars.forEach((b,i)=>{
-    if(i<reveal){
-      b.rect.setAttribute("y",b.yTop);
-      b.rect.setAttribute("height",b.h);
-      b.val.classList.add("show");
-    } else {
-      b.rect.setAttribute("y",state.chartBottom);
-      b.rect.setAttribute("height",0);
-      b.val.classList.remove("show");
+runBoot();
+
+/* ================= STORY GRAPH (id-based, bug-safe) ================= */
+const nodes = {
+
+  n1: {chapter:"CH.1 \u2014 THE ASSUMPTION", sp:'sup', name:'SUPERVISOR',
+    text:"Here's the starting picture. Regional electricity generation has climbed every single year across the Pacific Islands for the last decade.", next:'n2'},
+  n2: {sp:'sup', name:'SUPERVISOR', text:"Population is growing, industry is expanding, more households are getting connected. On paper, that should be an emissions story.", next:'n3'},
+  n3: {sp:'sup', name:'SUPERVISOR', text:"So before we touch a single spreadsheet \u2014 what's your gut instinct? If power output keeps rising, what happens to emissions per person?", next:'n4choice'},
+  n4choice: {sp:'ana', name:'YOU', choice:true, prompt:"Choose your working hypothesis.", options:[
+      {label:"They rise together. More power, more emissions.", next:'n5a', log:{title:"HYPOTHESIS LOGGED", rows:[["Working theory","Electricity and emissions rise together"]]}},
+      {label:"I won't assume anything until I see the numbers.", next:'n5b', log:{title:"HYPOTHESIS LOGGED", rows:[["Working theory","No assumption \u2014 data first"]]}}
+    ]},
+  n5a: {sp:'sup', name:'SUPERVISOR', text:"That's the intuitive answer \u2014 most people would say the same. Which is exactly why we need to check it properly instead of publishing the intuition.", next:'n6'},
+  n5b: {sp:'sup', name:'SUPERVISOR', text:"Careful and correct. Let's earn the answer instead of guessing it \u2014 that's what this case file is for.", next:'n6'},
+  n6: {sp:'sys', name:'SYSTEM', text:"Pulling ten years of regional power-generation and per-capita GHG records...", next:'n7'},
+  n7: {sp:'sys', name:'SYSTEM', text:"Running a Pearson correlation between year-over-year electricity growth and year-over-year emissions growth.", next:'n8',
+    data:{title:"CORRELATION TEST", rows:[["Pearson r","0.18"],["p-value","0.53"],["Significance threshold","p < 0.05"],["Result","NOT SIGNIFICANT"]]},
+    log:{title:"EVIDENCE: WEAK CORRELATION", rows:[["Pearson r","0.18"],["p-value","0.53 (not significant)"]]}},
+  n8: {sp:'ana', name:'YOU', choice:true, prompt:"React to the result.", options:[
+      {label:"r = 0.18 is barely a relationship at all.", next:'n9'},
+      {label:"So my hypothesis was wrong.", next:'n9'}
+    ]},
+  n9: {sp:'sup', name:'SUPERVISOR', text:"We expected electricity to be the main driver of emissions. The evidence told a different story.", next:'n10', chapter:"CH.2 \u2014 THE TWIST"},
+  n10: {sp:'sup', name:'SUPERVISOR', text:"Producing more electricity does not automatically mean producing more emissions. Each country's energy system and economic activity shapes its own outcome.", next:'n11'},
+  n11: {sp:'ana', name:'YOU', text:"Then what's actually driving the differences between countries, if it isn't raw output?", next:'n12'},
+  n12: {sp:'sup', name:'SUPERVISOR', text:"Fuel mix. Industrial activity. Population size. Country-specific characteristics that never show up if you only look at total megawatt-hours.", next:'n13'},
+  n13: {sp:'sup', name:'SUPERVISOR', text:"And there's something else skewing the regional average. One country is doing almost all the work.", next:'n14'},
+  n14: {sp:'sys', name:'SYSTEM', text:"Flagging outlier in per-capita emissions trend...", next:'n15',
+    data:{title:"OUTLIER FLAG", rows:[["Country","Palau"],["Pattern","Large reduction in per-capita emissions"],["Effect on region","Pulls the whole regional trend downward"]]},
+    log:{title:"EVIDENCE: PALAU OUTLIER", rows:[["Finding","Palau's steep drop skews the regional decline"]]}},
+  n15: {sp:'sup', name:'SUPERVISOR', text:"Palau's large reduction in reported per-capita emissions is strongly affecting the apparent regional decline. Without it, the picture looks flatter.", next:'n16choice'},
+  n16choice: {sp:'ana', name:'YOU', choice:true, prompt:"Respond to the supervisor.", options:[
+      {label:"So the 'region is improving' story is really 'one country improved a lot.'", next:'n17'},
+      {label:"What is a single regional average even hiding?", next:'n17b'}
+    ]},
+  n17: {sp:'sup', name:'SUPERVISOR', text:"That's the kind of distinction that gets lost in a press release. It shouldn't get lost in our report.", next:'n18'},
+  n17b: {sp:'sup', name:'SUPERVISOR', text:"A regional average is one number pretending to represent eleven different countries. It smooths over exactly the differences we're being asked to explain.", next:'n18'},
+  n18: {sp:'ana', name:'YOU', text:"Then let's stop looking at one average and start grouping countries by how they actually behave.", next:'n19', chapter:"CH.3 \u2014 THE PATTERN"},
+  n19: {sp:'sys', name:'SYSTEM', text:"Running K-Means clustering across national emissions profiles...", next:'n20'},
+  n20: {sp:'sys', name:'SYSTEM', text:"Clustering complete. Three distinct groups identified.", next:'n21',
+    data:{title:"K-MEANS CLUSTERING", rows:[["Cluster A","Most Pacific Islands \u2014 low, stable"],["Cluster B","Palau \u2014 isolated cluster"],["Cluster C","New Caledonia \u2014 isolated cluster"]]},
+    log:{title:"EVIDENCE: THREE CLUSTERS", rows:[["Cluster A","Majority \u2014 low & stable"],["Cluster B","Palau (unique profile)"],["Cluster C","New Caledonia (unique profile)"]]}},
+  n21: {sp:'sup', name:'SUPERVISOR', text:"Most Pacific Island countries fall into one low, stable emissions cluster. Business as usual, year after year.", next:'n22'},
+  n22: {sp:'sup', name:'SUPERVISOR', text:"Palau and New Caledonia each form their own separate cluster. Their emissions profiles differ substantially from everyone else's \u2014 and from each other.", next:'n23choice'},
+  n23choice: {sp:'ana', name:'YOU', choice:true, prompt:"Sum up what the clustering means.", options:[
+      {label:"Same ocean, different emissions story.", next:'n24'},
+      {label:"There's no single 'Pacific Islands' trend \u2014 there are several.", next:'n24'}
+    ]},
+  n24: {sp:'sup', name:'SUPERVISOR', text:"Exactly. Write that down \u2014 it belongs in the summary.", next:'n25', log:{title:"KEY INSIGHT", rows:[["Note","No single regional trend \u2014 at least three distinct patterns"]]}},
+  n25: {sp:'sup', name:'SUPERVISOR', text:"We understand the last ten years now. The harder question is what comes next \u2014 and what we actually tell people to do about it.", next:'n26choice', chapter:"CH.4 \u2014 LOOKING FORWARD"},
+  n26choice: {sp:'ana', name:'YOU', choice:true, prompt:"Where do you want to take the investigation next?", options:[
+      {label:"Build the forecast first.", next:'n27'},
+      {label:"Skip ahead to recommendations.", next:'n33'}
+    ]},
+  n27: {sp:'sys', name:'SYSTEM', text:"Building a linear projection from the ten-year trend...", next:'n28'},
+  n28: {sp:'sys', name:'SYSTEM', text:"Projection complete.", next:'n29',
+    data:{title:"LINEAR FORECAST", rows:[["Electricity by 2028","~11,960 GWh"],["Avg. per-capita GHG by 2029","~5.8 tonnes"],["Model","Simple linear trend"],["Caveat","Directional, not a precise prediction"]]},
+    log:{title:"EVIDENCE: FORECAST", rows:[["Electricity, 2028","~11,960 GWh (rising)"],["Per-capita GHG, 2029","~5.8 t (declining)"]]}},
+  n29: {sp:'sup', name:'SUPERVISOR', text:"Regional electricity generation is projected to keep climbing, toward roughly 11,960 GWh by 2028.", next:'n30'},
+  n30: {sp:'sup', name:'SUPERVISOR', text:"At the same time, average per-capita emissions are expected to gradually decline, to around 5.8 tonnes by 2029.", next:'n31choice'},
+  n31choice: {sp:'ana', name:'YOU', choice:true, prompt:"React to the forecast.", options:[
+      {label:"That's the opposite of what most people would predict.", next:'n32'},
+      {label:"How much should we actually trust a linear model?", next:'n32b'}
+    ]},
+  n32: {sp:'sup', name:'SUPERVISOR', text:"It is. Which is exactly why we check the data instead of trusting the headline. But it's a linear model on a limited window \u2014 treat it as a compass heading, not a guarantee.", next:'n33'},
+  n32b: {sp:'sup', name:'SUPERVISOR', text:"Not much on its own. Linear models assume the last ten years keep behaving like the last ten years. Fuel-mix shifts or new policy could bend that line fast.", next:'n33'},
+  n33: {sp:'sup', name:'SUPERVISOR', text:"This is the part that matters most. A finding is only useful if it changes a decision. Four recommendations, based strictly on what the data showed us \u2014 nothing invented.", next:'n34', chapter:"CH.5 \u2014 WHAT SHOULD BE DONE"},
+  n34: {sp:'sup', name:'SUPERVISOR', text:"One: transition to cleaner energy. Volume isn't the driving factor \u2014 composition is. The leverage point is what fills the generation mix.", next:'n35',
+    data:{title:"RECOMMENDATION 1 / 4", rows:[["Focus","Cleaner energy transition"],["Action","Expand access, raise renewable share"]]},
+    log:{title:"RECOMMENDATION 1: CLEAN ENERGY MIX", rows:[["Action","Expand access AND grow renewables' share"]]}},
+  n35: {sp:'ana', name:'YOU', text:"So keep connecting more households, but change what's powering the grid while you do it.", next:'n36'},
+  n36: {sp:'sup', name:'SUPERVISOR', text:"Two: country-specific policy. A single regional strategy would ignore everything the clustering just showed us.", next:'n37',
+    data:{title:"RECOMMENDATION 2 / 4", rows:[["Palau","Investigate and stabilize the outlier"],["New Caledonia","Manage industrial growth"],["Rest of region","Maintain the low, stable baseline"]]},
+    log:{title:"RECOMMENDATION 2: TAILORED POLICY", rows:[["Palau","Understand and stabilize its outlier drop"],["New Caledonia","Manage industrial-driven growth"],["Others","Protect the existing low, stable pattern"]]}},
+  n37: {sp:'ana', name:'YOU', text:"Meaning Palau needs its drop understood so it isn't a fragile one-off, and New Caledonia needs its growth actively managed.", next:'n38'},
+  n38: {sp:'sup', name:'SUPERVISOR', text:"Exactly that. Three: improve data collection. We built all of this on a genuinely limited dataset \u2014 that limitation belongs in the open, not a footnote.", next:'n39',
+    data:{title:"RECOMMENDATION 3 / 4", rows:[["Focus","Data quality"],["Needed","Population detail, fuel mix, renewable share, monthly resolution"]]},
+    log:{title:"RECOMMENDATION 3: BETTER DATA", rows:[["Gaps","Population detail, fuel mix, renewable share, monthly granularity"],["Why","Sharper data means more trustworthy models"]]}},
+  n39: {sp:'ana', name:'YOU', text:"Finer time resolution alone would help \u2014 annual numbers hide a lot that monthly numbers wouldn't.", next:'n40'},
+  n40: {sp:'sup', name:'SUPERVISOR', text:"Four: keep monitoring. The forecast reads as cautiously positive \u2014 but it's still a simple linear model, and simple models are the first thing reality contradicts.", next:'n41',
+    data:{title:"RECOMMENDATION 4 / 4", rows:[["Focus","Ongoing monitoring"],["Signal","Electricity up, per-capita emissions down (slowly)"],["Caveat","Re-check the trend as new years of data arrive"]]},
+    log:{title:"RECOMMENDATION 4: KEEP WATCHING", rows:[["Trend","Electricity rising, per-capita emissions slowly falling"],["Duty","Re-run the analysis as real data comes in"]]}},
+  n41: {sp:'ana', name:'YOU', choice:true, prompt:"Close out the investigation with the supervisor.", options:[
+      {label:"So the real challenge was never how much power gets made.", next:'n42a'},
+      {label:"So the report isn't finished the day it's published.", next:'n42b'}
+    ]},
+  n42a: {sp:'sup', name:'SUPERVISOR', text:"It's how that power gets made. Say it exactly like that in the summary \u2014 it's the one line that will survive editing.", next:'n43'},
+  n42b: {sp:'sup', name:'SUPERVISOR', text:"Correct. A forecast is a snapshot, not a promise. Someone has to keep re-checking it.", next:'n43'},
+  n43: {sp:'sup', name:'SUPERVISOR', text:"Good work, analyst. File it.", next:'END'}
+};
+
+let notebookLog = [];
+let current = 'n1';
+
+const speakerEl = document.getElementById('speaker');
+const dialogueEl = document.getElementById('dialogueText');
+const choicesEl = document.getElementById('choices');
+const advanceHint = document.getElementById('advanceHint');
+const portraitLeft = document.getElementById('portraitLeft');
+const portraitRight = document.getElementById('portraitRight');
+const dataCard = document.getElementById('dataCard');
+const dataCardBody = document.getElementById('dataCardBody');
+const chapterLabel = document.getElementById('chapterLabel');
+const logCount = document.getElementById('logCount');
+
+function startGame(){
+  document.getElementById('boot').classList.remove('active');
+  document.getElementById('vn').classList.add('active');
+  render('n1');
+}
+
+function render(id){
+  if(id === 'END'){ showEnd(); return; }
+  const node = nodes[id];
+  if(!node){ console.error('missing node', id); return; }
+  current = id;
+  dataCard.classList.remove('show');
+  if(node.chapter){ chapterLabel.textContent = node.chapter; }
+
+  if(node.sp === 'sup'){
+    speakerEl.textContent = node.name;
+    portraitLeft.classList.add('show');
+    portraitRight.classList.remove('show');
+  } else if(node.sp === 'ana'){
+    speakerEl.textContent = node.name;
+    portraitRight.classList.add('show');
+    portraitLeft.classList.remove('show');
+  } else {
+    speakerEl.textContent = node.name;
+    portraitLeft.classList.remove('show');
+    portraitRight.classList.remove('show');
+  }
+
+  if(node.choice){
+    dialogueEl.textContent = node.prompt || "";
+    advanceHint.style.display = 'none';
+    choicesEl.innerHTML = '';
+    choicesEl.classList.add('active');
+    node.options.forEach(opt=>{
+      const b = document.createElement('button');
+      b.className = 'choiceBtn';
+      b.textContent = opt.label;
+      b.onclick = (e)=>{
+        e.stopPropagation();
+        choicesEl.classList.remove('active');
+        if(opt.log) addLog(opt.log);
+        render(opt.next);
+      };
+      choicesEl.appendChild(b);
+    });
+  } else {
+    choicesEl.classList.remove('active');
+    advanceHint.style.display = 'block';
+    dialogueEl.textContent = node.text;
+    if(node.data){
+      dataCardBody.innerHTML = '';
+      dataCard.querySelector('.title').textContent = node.data.title;
+      node.data.rows.forEach(r=>{
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = '<span>'+r[0]+'</span><span>'+r[1]+'</span>';
+        dataCardBody.appendChild(row);
+      });
+      dataCard.classList.add('show');
     }
-  });
-}
-
-/* ---------- vertical sticky engine ---------- */
-function setupStory(storyId,textId,railId,stepCount,onUpdate){
-  const story = document.getElementById(storyId);
-  const steps = document.querySelectorAll("#"+textId+" .step");
-  const railDots = railId ? document.querySelectorAll("#"+railId+" .dot") : [];
-
-  function update(){
-    const rect = story.getBoundingClientRect();
-    const total = story.offsetHeight - window.innerHeight;
-    const raw = -rect.top/(total||1);
-    const clamped = Math.max(0,Math.min(0.9999,raw));
-    const stepFloat = clamped*stepCount;
-    const stepIndex = Math.min(stepCount-1,Math.floor(stepFloat));
-    const stepProgress = stepFloat - stepIndex;
-
-    steps.forEach((s,i)=>s.classList.toggle("active",i===stepIndex));
-    railDots.forEach((d,i)=>d.classList.toggle("active",i===stepIndex));
-    onUpdate(clamped,stepIndex,stepProgress);
+    if(node.log){ addLog(node.log); }
   }
-  let ticking=false;
-  window.addEventListener("scroll",()=>{
-    if(!ticking){ requestAnimationFrame(()=>{update(); ticking=false;}); ticking=true; }
-  });
-  update();
 }
 
-/* ---------- horizontal scroll engine ---------- */
-function setupHScroll(outerId, trackId, fillId){
-  const outer = document.getElementById(outerId);
-  const track = document.getElementById(trackId);
-  const fill = document.getElementById(fillId);
+function advance(){
+  const node = nodes[current];
+  if(!node || node.choice) return;
+  if(node.next) render(node.next);
+}
 
-  function update(){
-    const rect = outer.getBoundingClientRect();
-    const total = outer.offsetHeight - window.innerHeight;
-    const raw = -rect.top/(total||1);
-    const clamped = Math.max(0,Math.min(1,raw));
-    const maxScroll = Math.max(0, track.scrollWidth - track.parentElement.clientWidth + 40);
-    track.style.transform = `translateX(-${clamped*maxScroll}px)`;
-    if(fill) fill.style.width = (clamped*100)+"%";
+function addLog(entry){
+  if(notebookLog.find(l=>l.title===entry.title)) return;
+  notebookLog.push(entry);
+  logCount.textContent = '['+notebookLog.length+']';
+  renderNotebook();
+}
+
+function renderNotebook(){
+  const body = document.getElementById('notebookBody');
+  if(notebookLog.length===0){
+    body.innerHTML = '<div class="empty">No evidence logged yet. Keep investigating.</div>';
+    return;
   }
-  let ticking=false;
-  window.addEventListener("scroll",()=>{
-    if(!ticking){ requestAnimationFrame(()=>{update(); ticking=false;}); ticking=true; }
+  body.innerHTML = '';
+  notebookLog.forEach(entry=>{
+    const div = document.createElement('div');
+    div.className = 'entry';
+    const t = document.createElement('div');
+    t.className = 't';
+    t.textContent = entry.title;
+    div.appendChild(t);
+    entry.rows.forEach(r=>{
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = '<span>'+r[0]+'</span><span>'+r[1]+'</span>';
+      div.appendChild(row);
+    });
+    body.appendChild(div);
   });
-  window.addEventListener("resize", update);
-  update();
 }
 
-function updateProgressBar(){
-  const doc = document.documentElement;
-  const scrolled = (doc.scrollTop)/(doc.scrollHeight-doc.clientHeight)*100;
-  document.getElementById("progress").style.width = scrolled+"%";
+function toggleNotebook(show){
+  const nb = document.getElementById('notebook');
+  if(show){ renderNotebook(); nb.classList.add('show'); }
+  else { nb.classList.remove('show'); }
 }
 
-window.addEventListener("load", ()=>{
-  const c1 = buildChart1();
-  const c3 = buildChart3();
-
-  setupStory("story1","text1","rail1",4,(clamped,stepIndex)=>updateChart1(c1,clamped,stepIndex));
-  setupStory("story3","text3","rail3",4,(clamped,stepIndex)=>updateChart3(c3,stepIndex));
-  setupHScroll("hstory","htrack","hfill");
-
-  window.addEventListener("scroll", updateProgressBar);
-  updateProgressBar();
-});
+function showEnd(){
+  document.getElementById('vn').classList.remove('active');
+  document.getElementById('endScreen').classList.add('active');
+  document.getElementById('endBody').innerHTML =
+    '<p style="text-align:center;color:#fff;">CASE FILE PROJECT 0.18 \u2014 CLOSED</p>' +
+    '<h3>MAIN FINDING</h3>' +
+    '<p>Increasing electricity generation does not necessarily increase greenhouse gas emissions. The correlation between generation growth and per-capita emissions growth was weak and statistically insignificant (r = 0.18, p = 0.53). Emissions are shaped far more by fuel mix, industrial activity, population, and country-specific characteristics \u2014 and by Palau\u2019s outsized reduction skewing the regional average.</p>' +
+    '<h3>WHAT SHOULD BE DONE</h3>' +
+    '<ol>' +
+      '<li><b>Transition to cleaner energy.</b> Volume isn\u2019t the driver \u2014 composition is. Keep expanding electricity access, but grow the renewable share of the mix.</li>' +
+      '<li><b>Adopt country-specific policy.</b> Understand and stabilize Palau\u2019s outlier drop, actively manage New Caledonia\u2019s industrial growth, and support the rest of the region in holding its already-low baseline.</li>' +
+      '<li><b>Improve data collection.</b> Add population detail, fuel-mix breakdowns, renewable-energy shares, and finer time resolution so future models are sharper than this one.</li>' +
+      '<li><b>Continue monitoring.</b> The forecast \u2014 electricity toward ~11,960 GWh by 2028, per-capita emissions toward ~5.8 tonnes by 2029 \u2014 is a positive but simple linear projection. Re-check it as real data arrives; don\u2019t treat it as finished.</li>' +
+    '</ol>' +
+    '<h3>CLOSING NOTE</h3>' +
+    '<p>The real challenge was never how much electricity gets produced. It\u2019s how that electricity gets produced \u2014 and whether anyone keeps watching after the report ships.</p>';
+}
 </script>
 
 </body>
